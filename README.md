@@ -209,7 +209,61 @@ As shown above
 - So when the query executes the record that has `email` = `gm.mohamedsamir@gmail.com` will be updated but the only columns `name` and `password` are updated.
 - The second record that has `email` = `hello@user.com` will be inserted to the table because it's not exists before.
 
+### use model traits 
 
+```php 
+namespace App\User;
+
+class User {
+    use BulkActions;
+}
+
+$user = new User(); 
+// insert
+$user->bulkCreate([ 
+    [
+        "name" => "mohamed samir",
+        "email" => "gm.mohamedsamir@gmail.com",
+        "password" => "123456"
+    ],
+    [
+        "name" => "user 1",
+        "email" => "user1@test.com",
+        "password" => "123456"
+    ],
+]);
+// update
+$user->bulkUpdate([
+    1 => [
+        "is_admin" => true,
+    ],
+    3 => [
+        "name" => "ahmed",
+        "is_admin" => false,
+    ],
+    70 => [
+        "password" => "123123"
+    ],
+]);
+// if you want to use custom key 
+$user->bulkUseKey('email')
+    ->bulkUpdate([ 
+        'user1@gmail.com' => [
+            "is_admin" => true,
+        ],
+        'user2@gmail.com' => [
+            "name" => "ahmed",
+            "is_admin" => false,
+        ],
+        'user3@gmail.com' => [
+            "password" => "123123"
+        ],
+    ]);
+
+
+// delete
+$user->bulkDelete(1, 2, 3);
+```
 ## Testing
 
 ```bash
